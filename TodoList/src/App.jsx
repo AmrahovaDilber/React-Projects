@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Input from "./components/Input";
 import List from "./components/List";
+import Sorting from "./components/Sorting";
 
 const App = () => {
   const [items, setItems] = useState([]);
@@ -54,6 +55,26 @@ const App = () => {
     setItems([]);
   }
 
+  function handleAll() {
+    setItems(items); 
+  }
+
+  function handleCompleted() {
+    const completedItems = items.filter((item) => item.isChecked === true);
+    setItems(completedItems);
+  }
+
+  function handlePending() {
+    const pendingItems = items.filter((item) => item.isChecked !== true);
+    setItems(pendingItems);
+  }
+
+  useEffect(() => {
+    handlePending()
+    handleCompleted()
+    handleAll()
+  },[items])
+
   useEffect(() => {
     if (searchInput) {
       const filteredArr = items.filter((item) =>
@@ -78,53 +99,56 @@ const App = () => {
 
   return (
     <div className="bg-gray-100 w-full flex items-center justify-center min-h-screen p-4">
-    <div className="flex flex-col max-w-lg w-full bg-white shadow-lg p-6 rounded-lg">
-      <h1 className="text-center font-bold text-4xl mb-4 italic text-gray-900">
-        My Todo
-      </h1>
-  
-      {/* Completed Tasks Indicator */}
-      <p className="mb-3 font-semibold text-lg text-gray-800">
-        Completed Tasks:{" "}
-        <span className="text-blue-600">
-          {percent > 0 ? Number(percent.toFixed()):0}%
-        </span>
-      </p>
-  
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search tasks..."
-        className="border border-gray-300 pl-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-400 mb-3"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-      />
-  
-      {/* Task Input Field */}
-      <Input
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        handleAddElement={handleAddElement}
-      />
-  
-      {/* Task List */}
-      <List
-        items={items}
-        handleDeleteItem={handleDeleteItem}
-        handleCheckItem={handleCheckItem}
-        handleEditItem={handleEditItem}
-      />
-  
-      {/* Clear Button */}
-      <button
-        className="max-w-[120px] w-full font-semibold text-white text-lg bg-violet-500 hover:bg-violet-600 transition duration-200 mx-auto rounded-lg py-2 mt-4 shadow-md cursor-pointer"
-        onClick={handleClear}
-      >
-        Clear
-      </button>
+      <div className="flex flex-col max-w-lg w-full bg-white shadow-lg p-6 rounded-lg">
+        <h1 className="text-center font-bold text-4xl mb-4 italic text-gray-900">
+          My Todo
+        </h1>
+
+    
+        <p className="mb-3 font-semibold text-lg text-gray-800">
+          Completed Tasks:{" "}
+          <span className="text-blue-600">
+            {percent > 0 ? Number(percent.toFixed()) : 0}%
+          </span>
+        </p>
+
+
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          className="border border-gray-300 pl-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-400 mb-3"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+
+        <Sorting
+          handleAll={handleAll}
+          handleCompleted={handleCompleted}
+          handlePending={handlePending}
+        ></Sorting>
+      
+        <Input
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          handleAddElement={handleAddElement}
+        />
+
+   
+        <List
+          items={items}
+          handleDeleteItem={handleDeleteItem}
+          handleCheckItem={handleCheckItem}
+          handleEditItem={handleEditItem}
+        />
+
+        <button
+          className="max-w-[120px] w-full font-semibold text-white text-lg bg-violet-500 hover:bg-violet-600 transition duration-200 mx-auto rounded-lg py-2 mt-4 shadow-md cursor-pointer"
+          onClick={handleClear}
+        >
+          Clear
+        </button>
+      </div>
     </div>
-  </div>
-  
   );
 };
 
