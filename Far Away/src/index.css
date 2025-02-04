@@ -1,0 +1,165 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: #997523;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* App Container */
+  .app-container {
+
+   padding: 30px;
+
+
+    border-radius: 10px;
+  }
+  .form-container{
+    display: flex;
+    align-items: center; 
+    max-width: 500px;
+    width: 100%;
+    margin: auto; 
+    justify-content: space-between;
+  }
+
+  /* Logo */
+  .logo{
+    background-color: antiquewhite;
+  }
+  .logo h1 {
+    color: #ff6347;
+    padding: 20px;
+  }
+  .contain{
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    
+  }
+  
+  /* Form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .form p{
+    background-color: #b9930c;
+    padding: 15px;
+  }
+  .form select,
+  .form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+  }
+  
+  .add-button:hover {
+    background-color: #e5533d;
+  }
+  
+  /* Packing List */
+  .packing-list {
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .packing-list h2 {
+    border-bottom: 2px solid #ff6347;
+    padding-bottom: 5px;
+  }
+  
+  /* Item */
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .item p {
+    margin: 0;
+    flex-grow: 1;
+  }
+  
+  .packed {
+    text-decoration: line-through;
+    color: gray;
+  }
+  
+  .delete-button {
+    background: none;
+    border: none;
+    color: #ff6347;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    color: #e5533d;
+  }
+  
+  /* Stats */
+  .stats {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #d7d1d1;
+  }
+  
+
+  /* Sorting & Clear Button Container */
+.sort-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Select Dropdown */
+  .sort-container select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  /* Clear Button */
+  .clear-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .clear-button:hover {
+    background-color: #d93636;
+  }
+  
