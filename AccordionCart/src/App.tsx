@@ -15,7 +15,6 @@ const faqs: faqType[] = [
   },
 ];
 
-
 interface faqType {
   title: string;
   text: string;
@@ -28,4 +27,3 @@ export default function App() {
     </div>
   );
 }
-

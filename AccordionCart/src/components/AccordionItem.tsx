@@ -8,6 +8,7 @@ interface itemProps {
 
 const AccordionItem: React.FC<itemProps> = ({ num, title, text }) => {
   const [clickedCard, setClickedCard] = useState<null | number>(null);
+
   function handleShow(id: number) {
     if (id === clickedCard) {
       setClickedCard(null);
@@ -15,12 +16,13 @@ const AccordionItem: React.FC<itemProps> = ({ num, title, text }) => {
       setClickedCard(id);
     }
   }
+
   return (
     <div className="item">
       <p className="number">{num}</p>
-          <p className={`text ${clickedCard===num&&"active"}`}>{title}</p>
+      <p className={`text ${clickedCard === num && "active"}`}>{title}</p>
       <p className="icon" onClick={() => handleShow(num)}>
-        {clickedCard===num?"-":"+"}
+        {clickedCard === num ? "-" : "+"}
       </p>
       {clickedCard === num && <div className="content-box">{text}</div>}
     </div>
