@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const API_KEY = "f21a6bf3bfe42bde02aa229e67732bb8";
 
 const tempMovieData = [
   {
@@ -60,7 +62,7 @@ function Search() {
       value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
-  );   
+  );
 }
 
 function Logo() {
@@ -89,8 +91,50 @@ function Navbar({ children }) {
 }
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&region=US`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch movies");
+        }
+        if (response.ok) {
+          const data = await response.json();
+          setMovies(data.results);
+          setLoading(false);
+        } else {
+          console.error("Failed to fetch movies:", response.status);
+        }
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+        setError(error.message);
+      }
+    }
+
+    fetchMovies();
+  }, []); //
+
+  function handleSelectMovie(id) {
+    if (selectedId) {
+      setSelectedId(null);
+    } else {
+      setSelectedId(id);
+    }
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
+
   return (
     <>
       <Navbar movies={movies}>
@@ -98,28 +142,58 @@ export default function App() {
       </Navbar>
       <Main>
         <Box>
-          <MovieList movies={movies}></MovieList>
+          {loading && <p>Loading</p>}
+          {!loading && !error && (
+            <MovieList
+              handleSelectMovie={handleSelectMovie}
+              movies={movies}
+            ></MovieList>
+          )}
+          {error && <p>{error}</p>}
         </Box>
         <Box>
-        <WatchedSummary watched={watched}></WatchedSummary>
-        <WatchedMovieList watched={watched}></WatchedMovieList>
+          {selectedId ? (
+            <MovieDetails
+              handleCloseMovie={handleCloseMovie}
+              selectedId={selectedId}
+            ></MovieDetails>
+          ) : (
+            <>
+              <WatchedSummary watched={watched}></WatchedSummary>
+              <WatchedMovieList watched={watched}></WatchedMovieList>
+            </>
+          )}
         </Box>
       </Main>
     </>
   );
 }
 
-
-
-function Movie({ movie }) {
+function MovieDetails({ selectedId, handleCloseMovie }) {
+  // const findEl=movies.filter((movie)=>movie.id===selectedId)
+  console.log(selectedId);
   return (
-    <li key={movie.imdbID}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+    <button onClick={handleCloseMovie} className="details">
+      &larr;
+      {selectedId}
+    </button>
+  );
+}
+
+function Movie({ movie, handleSelectMovie }) {
+  return (
+    <li key={movie.id} onClick={() => handleSelectMovie(movie.id)}>
+      <img
+        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+        alt={`${movie.title} poster`}
+      />
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>🗓</span>
-          <span>{movie.Year}</span>
+          <span>
+            {movie.release_date ? movie.release_date.split("-")[0] : "N/A"}
+          </span>
         </p>
       </div>
     </li>
@@ -188,39 +262,31 @@ function WatchedMovieList({ watched }) {
   );
 }
 
-
-
 function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen((open) => !open)}
-      >
+      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "–" : "+"}
       </button>
-      {isOpen &&  children }
+      {isOpen && children}
     </div>
   );
 }
 
-
 function Main({ children }) {
-  return (
-    <main className="main">
-      {children}
-
-    </main>
-  );
+  return <main className="main">{children}</main>;
 }
 
-
-function MovieList({ movies }) {
+function MovieList({ movies, handleSelectMovie }) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map((movie) => (
-        <Movie movie={movie} key={movie.id}></Movie>
+        <Movie
+          movie={movie}
+          key={movie.id}
+          handleSelectMovie={handleSelectMovie}
+        ></Movie>
       ))}
     </ul>
   );
