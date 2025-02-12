@@ -2,8 +2,8 @@ import { useState } from "react";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 
-export default function StarRating({ maxRating }) {
-  const [rating, setRating] = useState(1);
+export default function StarRating({ maxRating, onSetRating }) {
+  const [rating, setRating] = useState(0); // Start with no stars selected
 
   const containerStyle = {
     display: 'flex',
@@ -32,6 +32,7 @@ export default function StarRating({ maxRating }) {
 
   function handleRating(newRating) {
     setRating(newRating);
+    if (onSetRating) onSetRating(newRating); 
   }
 
   return (
@@ -39,15 +40,15 @@ export default function StarRating({ maxRating }) {
       <div style={starContainerStyle}>
         {Array.from({ length: maxRating }, (_, i) => (
           <span
-            onClick={() => handleRating(i + 1)}
             key={i}
+            onClick={() => handleRating(i + 1)}
             style={starStyle}
           >
             {i < rating ? <FaStar /> : <CiStar />}
           </span>
         ))}
       </div>
-      <p style={textStyle}>{rating || ""}</p>
+      <p style={textStyle}>{rating || "Rate"}</p>
     </div>
   );
 }
